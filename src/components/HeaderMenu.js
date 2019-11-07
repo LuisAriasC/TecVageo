@@ -1,16 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { fade, withStyles } from '@material-ui/core/styles';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import { Link } from 'react-router-dom';
+import SettingsIcon from '@material-ui/icons/Settings';
+import FlightTakeoffIcon from '@material-ui/icons/FlightTakeoff';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import { Link } from '@material-ui/core';
+import { Redirect } from "react-router-dom";
 
-
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   link: {
     textDecoration: 'none',
     color: 'white'
@@ -74,63 +78,186 @@ const styles = theme => ({
       display: 'none',
     },
   },
-});
+}));
 
-class HeaderMenu extends React.Component {
+export default function PrimarySearchAppBar() {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-    render(){
-        const { classes } = this.props;
-        const menuId = 'primary-search-account-menu';
-        const mobileMenuId = 'primary-search-account-menu-mobile';
-        return(
-            <React.Fragment>
-                    <div className={classes.grow}>
-                      <AppBar position="static">
-                        <Toolbar>
-                          <Typography className={classes.title} variant="h6" noWrap>
-                            <Link
-                              to={`/`}
-                              //onClick={preventDefault} 
-                              className={classes.link}
-                            >
-                              TecVago
-                            </Link>
-                          </Typography>
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-                          <div className={classes.grow} />
-                          <div className={classes.sectionDesktop}>
-                            <IconButton
-                              edge="end"
-                              aria-label="account of current user"
-                              aria-controls={menuId}
-                              aria-haspopup="true"
-                              color="inherit"
-                            >
-                              <AccountCircle />
-                            </IconButton>
-                          </div>
-                          <div className={classes.sectionMobile}>
-                            <IconButton
-                              aria-label="show more"
-                              aria-controls={mobileMenuId}
-                              aria-haspopup="true"
-                              color="inherit"
-                            >
-                              <MoreIcon />
-                            </IconButton>
-                          </div>
-                        </Toolbar>
-                      </AppBar>
-                      {this.renderMobileMenu}
-                      {this.renderMenu}
-                    </div>
-            </React.Fragment>
-        );
-    }
+  const goToMain_ = false;
+  const goToProfile_ = false;
+  var goToHistory_ = false;
+  const goToSettings_ = false;
+  const logOut_ = false;
+
+  const handleProfileMenuOpen = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuOpen = event => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const goToProfile = event => {
+    event.preventDefault();
+    console.log('Ir a Perfil');
+  }
+
+  const goToHistory = event => {
+    event.preventDefault();
+    console.log('Ir a History');
+    goToHistory_ = true;
+  }
+
+  const goToSettings = event => {
+    event.preventDefault();
+    console.log('Ir a Settings');
+  }
+
+  const logOut = event => {
+    event.preventDefault();
+    console.log('Log Out');
+  }
+
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={goToProfile}>
+        <IconButton aria-label="show 4 new mails" color="inherit">
+          <AccountCircle />
+        </IconButton>
+        <p>Perfil</p>
+      </MenuItem>
+
+      <MenuItem>
+        <Link href="/tecvago/history/" className={classes.link}>
+          <IconButton aria-label="show 11 new notifications" color="inherit">
+            <FlightTakeoffIcon/>
+          </IconButton>
+          <p>Mis Viajes</p>
+        </Link>
+      </MenuItem>
+
+      <MenuItem onClick={goToSettings}>
+        <IconButton aria-label="show 11 new notifications" color="inherit">
+          <SettingsIcon/>
+        </IconButton>
+        <p>Settings</p>
+      </MenuItem>
+
+      <MenuItem onClick={logOut}>
+        <IconButton aria-label="show 11 new notifications" color="inherit">
+          <MeetingRoomIcon/>
+        </IconButton>
+        <p>Log Out</p>
+      </MenuItem>
+    </Menu>
+  );
+
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem>
+        <IconButton aria-label="show 4 new mails" color="inherit">
+          <AccountCircle />
+        </IconButton>
+        <p>Perfil</p>
+      </MenuItem>
+
+      <MenuItem>
+        <Link href="/tecvago/history/" className={classes.link}>
+          <IconButton aria-label="show 11 new notifications" color="inherit">
+            <FlightTakeoffIcon/>
+          </IconButton>
+          <p>Mis Viajes</p>
+        </Link>
+      </MenuItem>
+
+      <MenuItem>
+        <IconButton aria-label="show 11 new notifications" color="inherit">
+          <SettingsIcon/>
+        </IconButton>
+        <p>Settings</p>
+      </MenuItem>
+
+      <MenuItem>
+        <IconButton aria-label="show 11 new notifications" color="inherit">
+          <MeetingRoomIcon/>
+        </IconButton>
+        <p>Log Out</p>
+      </MenuItem>
+    </Menu>
+  );
+
+  return (
+    <div className={classes.grow}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography className={classes.title} variant="h6" noWrap>
+            <Link href="/tecvago" className={classes.link}>
+              TecVago
+            </Link>
+          </Typography>
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
+          <div className={classes.sectionMobile}>
+            <IconButton
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
+      {renderMobileMenu}
+      {renderMenu}
+      {goToMain_ && <Redirect to="/tecvago"/>}
+      
+      {goToHistory_ && <Redirect to="/tecvago/history"/>}
+    </div>
+  );
 }
-
-HeaderMenu.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(HeaderMenu);
