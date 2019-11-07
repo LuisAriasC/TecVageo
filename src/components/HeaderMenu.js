@@ -17,6 +17,10 @@ import { Redirect } from "react-router-dom";
 const useStyles = makeStyles(theme => ({
   link: {
     textDecoration: 'none',
+    color: 'blue'
+  },
+  mainlink: {
+    textDecoration: 'none', 
     color: 'white'
   },
   grow: {
@@ -143,32 +147,27 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={goToProfile}>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <AccountCircle />
-        </IconButton>
-        <p>Perfil</p>
+      <MenuItem >
+        <Link href="/tecvago/user/" className={classes.link}>
+          <IconButton aria-label="show 4 new mails" color="inherit">
+            <AccountCircle />
+          </IconButton>
+          <p>Perfil</p>
+        </Link>
       </MenuItem>
 
       <MenuItem>
         <Link href="/tecvago/history/" className={classes.link}>
           <IconButton aria-label="show 11 new notifications" color="inherit">
-            <FlightTakeoffIcon/>
+            <FlightTakeoffIcon />
           </IconButton>
           <p>Mis Viajes</p>
         </Link>
       </MenuItem>
 
-      <MenuItem onClick={goToSettings}>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <SettingsIcon/>
-        </IconButton>
-        <p>Settings</p>
-      </MenuItem>
-
       <MenuItem onClick={logOut}>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <MeetingRoomIcon/>
+          <MeetingRoomIcon />
         </IconButton>
         <p>Log Out</p>
       </MenuItem>
@@ -196,7 +195,7 @@ export default function PrimarySearchAppBar() {
       <MenuItem>
         <Link href="/tecvago/history/" className={classes.link}>
           <IconButton aria-label="show 11 new notifications" color="inherit">
-            <FlightTakeoffIcon/>
+            <FlightTakeoffIcon />
           </IconButton>
           <p>Mis Viajes</p>
         </Link>
@@ -204,14 +203,14 @@ export default function PrimarySearchAppBar() {
 
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <SettingsIcon/>
+          <SettingsIcon />
         </IconButton>
         <p>Settings</p>
       </MenuItem>
 
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <MeetingRoomIcon/>
+          <MeetingRoomIcon />
         </IconButton>
         <p>Log Out</p>
       </MenuItem>
@@ -223,7 +222,7 @@ export default function PrimarySearchAppBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            <Link href="/tecvago" className={classes.link}>
+            <Link href="/tecvago" className={classes.mainlink}>
               TecVago
             </Link>
           </Typography>
@@ -255,9 +254,9 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-      {goToMain_ && <Redirect to="/tecvago"/>}
-      
-      {goToHistory_ && <Redirect to="/tecvago/history"/>}
+      {goToMain_ && <Redirect to="/tecvago" />}
+
+      {goToHistory_ && <Redirect to="/tecvago/history" />}
     </div>
   );
 }

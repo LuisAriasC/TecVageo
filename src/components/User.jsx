@@ -73,4 +73,4 @@ class User extends Component {
     }
 }
 
-export default User
+export default User;

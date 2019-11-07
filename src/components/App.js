@@ -20,8 +20,8 @@ class App extends React.Component {
         <Router>
           <HeaderMenu></HeaderMenu>
           <Switch>
-            {/* <Route path ="/" exact component={InitView}/> */}
-            <Route path ="/" exact component={MainScreen}/>            
+            <Route path ="/" exact component={InitView}/>
+            {/* <Route path ="/" exact component={MainScreen}/>*/}
             <Route path ="/tecvago" exact component={MainScreen}/>
             <Route path ="/tecvago/user" exact component = {User}/>
             <Route path ="/tecvago/select" exact component={SelectView}/>
