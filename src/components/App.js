@@ -11,6 +11,7 @@ import MainScreen from './MainScreen';
 import SelectView from './SelectView';
 import TravellHistory from './TravellHistory'
 import TravellDetails from './TravellDetails'
+import User from './User';
 
 class App extends React.Component {
   render(){
@@ -19,10 +20,11 @@ class App extends React.Component {
         <Router>
           <HeaderMenu></HeaderMenu>
           <Switch>
-            <Route path ="/" exact component={InitView}/>
+            {/* <Route path ="/" exact component={InitView}/> */}
+            <Route path ="/" exact component={MainScreen}/>            
             <Route path ="/tecvago" exact component={MainScreen}/>
+            <Route path ="/tecvago/user" exact component = {User}/>
             <Route path ="/tecvago/select" exact component={SelectView}/>
-
             <Route path ="/tecvago/history" exact component={TravellHistory}/>
             <Route path ="/tecvago/history/details" exact component={TravellDetails}/>
           </Switch>
