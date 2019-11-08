@@ -14,6 +14,8 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+
 
 const mapear = dispatch => ({
   action_get_travell_data: (selectedTravell) => dispatch(action_get_travell_data(selectedTravell)),
@@ -45,6 +47,10 @@ class SelectView extends React.Component {
         });
     }
 
+    componentDidUpdate(){
+      console.log(this.props);
+    }
+
     selectOption(id){
       if (!this.props.opts)
         this.props.action_add_option(id);
@@ -58,7 +64,9 @@ class SelectView extends React.Component {
   render(){
     return (
         <React.Fragment>
-            <p>{JSON.stringify(this.props)}</p>
+            {
+              //<p>{JSON.stringify(this.props)}</p>
+            }
             <Typography variant="h1" style={{textAlign: 'center'}}>Destino</Typography>
             <CssBaseline/>
             <Container>
@@ -69,9 +77,6 @@ class SelectView extends React.Component {
                         overflow: 'hidden',
                 }}>
                     <GridList cellHeight={250} style={{width: '100%', height: 500}}>
-                      <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
-                        <ListSubheader component="div">Destinos</ListSubheader>
-                      </GridListTile>
                       {this.state.renderList && this.props.availableOptions.map(tile => (
                         <GridListTile key={tile.id}>
                             {
@@ -95,6 +100,28 @@ class SelectView extends React.Component {
                         </GridListTile>
                       ))}
                     </GridList>
+                </Paper>
+
+                <Paper>
+                  <GridList style={{ flexWrap: 'nowrap', transform: 'translateZ(0)'}} cols={2.5}>
+                    {this.state.renderList && this.props.availableOptions.map(tile => (
+                      <GridListTile key={tile.img}>
+                        <img src={tile.img} alt={tile.title} />
+                        <GridListTileBar
+                          title={tile.title}
+                          classes={{
+                            root: {background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)'},
+                            title: {color: 'white'},
+                          }}
+                          actionIcon={
+                            <IconButton aria-label={`star ${tile.title}`}>
+                              <StarBorderIcon style={{color: 'white'}} />
+                            </IconButton>
+                          }
+                        />
+                      </GridListTile>
+                    ))}
+                  </GridList>
                 </Paper>
             </Container>
         </React.Fragment>

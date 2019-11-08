@@ -56,6 +56,10 @@ class MainScreen extends React.Component {
         //this.props.action_get_initial_values();
     }
 
+    componentDidUpdate(){
+        console.log(this.props);
+    }
+
     renderTravellTypes = () => {
         if(!_.isEmpty(this.props.initialValues)){
             return this.props.initialValues.travellTypes.map( travellType => {
@@ -130,7 +134,9 @@ class MainScreen extends React.Component {
             
             <React.Fragment>
                 {this.state.redirect && <Redirect to="/tecvago/select"/>}
-                <p>{JSON.stringify(this.props)}</p>
+                {
+                    //<p>{JSON.stringify(this.props)}</p>
+                }
                 <CssBaseline />
                 <Container fixed>
                     <Paper>
