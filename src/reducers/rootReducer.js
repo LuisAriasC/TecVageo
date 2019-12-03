@@ -3,11 +3,12 @@ import { combineReducers } from 'redux';
 import getInitialValuesReducer from './getInitialValuesReducer';
 import selectedOptionsReducer from './selectOptionsReducer';
 import historyReducer from './historyReducer';
-
+import authReducer from './authReducer';
 
 export default combineReducers({
     initialValues: getInitialValuesReducer,
     selectedOptions: selectedOptionsReducer,
-    historyOptions: historyReducer
+    historyOptions: historyReducer,
+    authOptions: authReducer
     //form: formReducer,
 });

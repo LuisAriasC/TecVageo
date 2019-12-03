@@ -3,23 +3,30 @@ import { connect } from 'react-redux';
 import { action_get_travell_data } from '../actions/actions';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import {
+  loggedIn
+} from '../actions/auth';
 
 
 const mapear = dispatch => ({
-  action_get_travell_data: () => dispatch(action_get_travell_data())
+  action_get_travell_data: () => dispatch(action_get_travell_data()),
+  loggedIn: () => dispatch(loggedIn())
 })
 
 const mapearEstado = state => ({
-  ...state.selectedOptions
+  authValues: state.authOptions
 });
 
 class InitView extends React.Component {
 
   constructor(props) {
     super(props);
-
+    
   }
 
+  componentDidUpdate(){
+    //console.log(this.props.authValues.isSignedIn);
+  }
   render() {
     return (
       <div style={{display:'flex'}}>

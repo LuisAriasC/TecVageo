@@ -4,6 +4,9 @@ import _ from 'lodash';
 import { action_get_initial_values,
          action_set_travell_data
 } from '../actions/actions';
+import {
+    signIn
+} from '../actions/auth';
 
 import {
     Container,
@@ -33,10 +36,12 @@ import { Redirect } from "react-router-dom";
 const mapear = dispatch => ({
     action_get_initial_values: () => dispatch(action_get_initial_values()),
     action_set_travell_data: (travellData) => dispatch(action_set_travell_data(travellData)),
+    signIn: (clientInfo) => dispatch(signIn(clientInfo)),
 })
 
 const mapearEstado = state => ({
-    initialValues: state.initialValues
+    initialValues: state.initialValues,
+    authValues: state.authOptions
 });
 
 class MainScreen extends React.Component {
@@ -44,6 +49,7 @@ class MainScreen extends React.Component {
     constructor(props){
         super(props);
         this.props.action_get_initial_values();
+        //this.props.signIn({email: 'luis.ac94@gmail.com', password: 'password1'});
         this.state = {
             type:'',
             country: '',
@@ -53,6 +59,7 @@ class MainScreen extends React.Component {
     }
 
     componentDidMount(){
+        //console.log(this.props.authValues);
         //this.props.action_get_initial_values();
     }
 
