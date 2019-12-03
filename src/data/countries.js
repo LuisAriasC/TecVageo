@@ -1,5 +1,5 @@
 export const countries = [
-    'Mexico',
+    'México',
     'USA',
     'Canada',
     'Germany'

@@ -16,6 +16,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import axios from 'axios';
 
 
 const mapear = dispatch => ({
@@ -40,12 +41,57 @@ class SelectView extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
     const props = this.props.selectedTravell;
     this.props.action_get_travell_data(props);
     this.setState({
       renderList: true
     });
+
+    const headers = {
+      "Authorization": localStorage.getItem('tv-token')
+    }
+
+    console.log("VIEW", props);
+    axios.get("http://localhost:8080/api/destination/", {
+      headers
+    }).then((res) => {
+      const data = res.data
+      let Destid = ''
+      for (let x in data) {
+
+        let obj = data[x]
+        if (
+          obj.country === props.country &&
+          obj.name === props.destination &&
+          obj.type === props.type) {
+          Destid = obj._id
+        }
+      }
+      console.log("ID", Destid)
+
+      axios.get("http://localhost:8080/api/activities/" + Destid, {
+        headers
+      }).then((res) => {
+        console.log("RES", res)
+        let activities = res.data
+
+        data_post = {
+          "destination": Destid,
+          "initialDate": 1,
+          "finalDate": 5,
+          "totalPrice": 1500,
+          "rating": 0,
+          "activities": activities
+        }
+
+        axios.post("http://localhost:8080/api/travell/", {
+          headers,
+
+        })
+
+      })
+
+    })
   }
 
   componentDidUpdate() {
@@ -105,7 +151,7 @@ class SelectView extends React.Component {
             <GridList style={{ flexWrap: 'nowrap', transform: 'translateZ(0)' }} cols={2.5}>
               {this.state.renderList && this.props.availableOptions.map(tile => (
                 <GridListTile key={tile.img}>
-                  <img src='https://image.freepik.com/vector-gratis/viajar-mundo_23-2147734014.jpg?3'/>
+                  <img src='https://image.freepik.com/vector-gratis/viajar-mundo_23-2147734014.jpg?3' />
                   <GridListTileBar
                     title={tile.title}
                     classes={{
