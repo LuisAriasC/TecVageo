@@ -110,7 +110,11 @@ function HeaderMenu() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
+  const [goToIndex, setGoToIndex] = useState(true);
   const [goToMain, setGoToMain] = useState(false);
+  const [goToProfile, setGoToProfile] = useState(false);
+  const [goToHistory, setGoToHistory] = useState(false);
+
 
   // Sign In and Sign Up controllers
   const [email, setEmail] = useState('');
@@ -118,16 +122,10 @@ function HeaderMenu() {
 
   useEffect(() => {
     dispatch({type: 'LOGGED_IN'});
-  }, [dispatch, email, password]);
+  }, [dispatch, goToIndex, goToMain, goToProfile, goToHistory, anchorEl, mobileMoreAnchorEl]);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  //const goToMain_ = false;
-  const goToProfile_ = false;
-  var goToHistory_ = false;
-  const goToSettings_ = false;
-  const logOut_ = false;
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -146,26 +144,16 @@ function HeaderMenu() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const goToProfile = event => {
-    event.preventDefault();
-    console.log('Ir a Perfil');
-  }
-
-  const goToHistory = event => {
-    event.preventDefault();
-    console.log('Ir a History');
-    goToHistory_ = true;
-  }
-
-  const goToSettings = event => {
-    event.preventDefault();
-    console.log('Ir a Settings');
-  }
-
   const logOut = event => {
     event.preventDefault();
-    dispatch({type: 'SIGN_OUT'});
-    console.log('Log Out');
+    localStorage.clear();
+    dispatch({type: 'LOGGED_IN'});
+    setGoToIndex(true);
+    setGoToMain(false);
+    setGoToHistory(false);
+    setGoToProfile(false);
+    setAnchorEl(null);
+    setMobileMoreAnchorEl(null);
   }
 
   const handleLoginOpen = () => {
@@ -185,7 +173,6 @@ function HeaderMenu() {
   };
 
   const logIntoAccount = async () => {
-    console.log(email, password);
     var info = {};
     var _error = false;
     try {
@@ -203,9 +190,11 @@ function HeaderMenu() {
         } else {
             info = response.data;
             info.isSignedIn = true;
-            console.log('Token recibido ', response.data.token );
             localStorage.setItem('tv-token', response.data.token);
+            setGoToIndex(false);
             setGoToMain(true);
+            setGoToHistory(false);
+            setGoToProfile(false);
         }
         dispatch({type: 'SIGN_IN', payload: info});
         setOpenLogin(false);
@@ -216,11 +205,36 @@ function HeaderMenu() {
 
   const preventDefault = event => {
     event.preventDefault();
+    setGoToIndex(false);
     setGoToMain(true);
+    setGoToHistory(false);
+    setGoToProfile(false);
+    setAnchorEl(null);
+    setMobileMoreAnchorEl(null);
   }
 
   const preventDefault2 = event => {
     event.preventDefault();
+  }
+
+  const preventDefaultHistory = event => {
+    event.preventDefault();
+    setGoToIndex(false);
+    setGoToMain(false);
+    setGoToHistory(true);
+    setGoToProfile(false);
+    setAnchorEl(null);
+    setMobileMoreAnchorEl(null);
+  }
+
+  const preventDefaultProfile = event => {
+    event.preventDefault();
+    setGoToIndex(false);
+    setGoToMain(false);
+    setGoToHistory(false);
+    setGoToProfile(true);
+    setAnchorEl(null);
+    setMobileMoreAnchorEl(null);
   }
 
   const menuId = 'primary-search-account-menu';
@@ -234,7 +248,7 @@ function HeaderMenu() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem >
+      <MenuItem onClick={preventDefaultProfile}>
         <Link href="/tecvago/user/" className={classes.link}>
           <IconButton aria-label="show 4 new mails" color="inherit">
             <AccountCircle />
@@ -243,7 +257,7 @@ function HeaderMenu() {
         </Link>
       </MenuItem>
 
-      <MenuItem>
+      <MenuItem onClick={preventDefaultHistory}>
         <Link href="/tecvago/history/" className={classes.link}>
           <IconButton aria-label="show 11 new notifications" color="inherit">
             <FlightTakeoffIcon />
@@ -305,7 +319,6 @@ function HeaderMenu() {
   );
 
   const redirectCorrect = () => {
-    console.log(store.isSignedIn);
     if(!store.isSignedIn){
       return(
         <Typography className={classes.title} variant="h6" noWrap>
@@ -429,8 +442,10 @@ function HeaderMenu() {
           }
         </Toolbar>
       </AppBar>
+      {goToIndex && <Redirect to="/"/>}
       {goToMain && <Redirect to="/tecvago" />}
-      {goToHistory_ && <Redirect to="/tecvago/history" />}
+      {goToHistory && <Redirect to="/tecvago/history" />}
+      {goToProfile && <Redirect to="/tecvago/user" />}
     </div>
   );
 }

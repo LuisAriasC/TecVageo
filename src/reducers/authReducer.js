@@ -10,7 +10,6 @@ export default (state = {}, action) => {
     switch(action.type){
         case LOGGED_IN:
             const tok = localStorage.getItem('tv-token');
-            console.log(tok);
             if(!tok) {
                 return {...state, isSignedIn: false};
             } else {
@@ -24,7 +23,6 @@ export default (state = {}, action) => {
                               isSignedIn: action.payload.isSignedIn 
                     };
         case SIGN_OUT:
-            console.log('Sign outkljcdcsdc');
             localStorage.clear();
             return {...state, isSignedIn: false};
         default:
