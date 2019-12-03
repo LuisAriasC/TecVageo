@@ -23,9 +23,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Redirect } from "react-router-dom";
-import {
-  loggedIn
-} from '../actions/auth';
 import { useSelector, useDispatch } from 'react-redux'
 
 
@@ -119,6 +116,9 @@ function HeaderMenu() {
   // Sign In and Sign Up controllers
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     dispatch({type: 'LOGGED_IN'});
@@ -198,6 +198,36 @@ function HeaderMenu() {
         }
         dispatch({type: 'SIGN_IN', payload: info});
         setOpenLogin(false);
+    } catch (err) {
+        throw(err);
+    }
+  }
+
+  const signUpAccount = async () => {
+    var info = {};
+    var _error = false;
+    try {
+        const response = await api.post('/api/client', {name, surname, username, email, password})
+        .catch(error => {
+            _error = !_error;
+        });
+        if(_error){
+            info.client = {};
+            info.client.name = '';
+            info.client.surname = '';
+            info.client.username = '';
+            info.isSignedIn = false;
+        } else {
+            info = response.data;
+            info.isSignedIn = true;
+            localStorage.setItem('tv-token', response.data.token);
+            setGoToIndex(false);
+            setGoToMain(true);
+            setGoToHistory(false);
+            setGoToProfile(false);
+        }
+        dispatch({type: 'SIGN_IN', payload: info});
+        setOpenSignup(false);
     } catch (err) {
         throw(err);
     }
@@ -390,6 +420,81 @@ function HeaderMenu() {
               </Button>
             </DialogActions>
           </Dialog>
+
+          {/*************************************************************/}
+          <Dialog open={openSignup} onClose={handleSignupClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Login</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Inserta los siguientes campos para registrarte
+              </DialogContentText>
+              
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Nombres"
+                type="text"
+                value={name}
+                onChange={(event) => {setName(event.target.value)}}
+                fullWidth
+              />
+
+              <TextField
+                autoFocus
+                margin="dense"
+                id="surname"
+                label="Apellidos"
+                type="text"
+                value={surname}
+                onChange={(event) => {setSurname(event.target.value)}}
+                fullWidth
+              />
+
+              <TextField
+                autoFocus
+                margin="dense"
+                id="username"
+                label="Nombre de Usuario"
+                type="text"
+                value={username}
+                onChange={(event) => {setUsername(event.target.value)}}
+                fullWidth
+              />
+
+              <TextField
+                autoFocus
+                margin="dense"
+                id="email"
+                label="Email Address"
+                type="email"
+                value={email}
+                onChange={(event) => {setEmail(event.target.value)}}
+                fullWidth
+              />
+
+              <TextField
+                autoFocus
+                margin="dense"
+                id="password"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(event) => {setPassword(event.target.value)}}
+                fullWidth
+              />
+
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleSignupClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={signUpAccount} color="primary">
+                Sign Up
+              </Button>
+            </DialogActions>
+          </Dialog>
+          {/*************************************************************/}
         </React.Fragment>
       );
     } else {
