@@ -72,23 +72,22 @@ class SelectView extends React.Component {
       axios.get("http://localhost:8080/api/activities/" + Destid, {
         headers
       }).then((res) => {
-        console.log("RES", res)
         let activities = res.data
 
-        data_post = {
-          "destination": Destid,
-          "initialDate": 1,
-          "finalDate": 5,
-          "totalPrice": 1500,
-          "rating": 0,
-          "activities": activities
-        }
 
         axios.post("http://localhost:8080/api/travell/", {
           headers,
-
+          data:{
+            "destination": Destid,
+            "initialDate": 1,
+            "finalDate": 5,
+            "totalPrice": 1500,
+            "rating": 0,
+            "activities": activities
+          }
+        }).then((res)=>{
+          console.log("RES", res)
         })
-
       })
 
     })
