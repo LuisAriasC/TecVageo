@@ -1,4 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import {
+    getUserAction,
+    updateUserAction
+} from '../actions/users';
+import TextField from '@material-ui/core/TextField';
+
+
 import {
     Container,
     Typography,
@@ -8,20 +16,57 @@ import {
     Button
 } from '@material-ui/core';
 
-class User extends Component {
-    constructor(props) {
-        super(props)
+const mapear = dispatch => ({
+    getUserAction: (token) => dispatch(getUserAction(token)),
+    updateUserAction: (token, update) => dispatch(updateUserAction(token, update))
+});
 
+const mapearEstado = state => ({
+    userValues: state.userOptions
+});
+
+class User extends Component {
+
+    constructor(props) {
+        super(props);
         this.state = {
-            name: "César Armando Valladares Martínez",
-            id: "AA001",
-            recom: [
-                "Restaurantes",
-                "Eventos",
-            ],
-            no_viajes: 10
+            name: '',
+            surname: '',
+            username: '',
+            email: '',
+            no_viajes: 0,
+            fetchedData: false
         }
     }
+
+    async componentDidMount(){
+        const token = localStorage.getItem('tv-token');
+        await this.props.getUserAction(token);
+        if(!this.props.userValues){
+            this.setState({
+                name: '',
+                surname: '',
+                username: '',
+                email: '',
+                no_viajes: 0
+            });
+        } else {
+            this.setState({
+                name: this.props.userValues.client.name,
+                surname: this.props.userValues.client.surname,
+                username: this.props.userValues.client.username,
+                email: this.props.userValues.client.email,
+                no_viajes: this.props.userValues.travells
+            });
+        }
+    }
+
+    editUser = (event) => {
+        event.preventDefault();
+        this.props.updateUserAction(localStorage.getItem('tv-token'), {name: this.state.name, surname: this.state.surname, username: this.state.username});
+        this.props.getUserAction(localStorage.getItem('tv-token'));
+    }
+
 
     render() {
         return (
@@ -33,34 +78,62 @@ class User extends Component {
                         <div>
                             <img src={require('../img/profile.png')} style={{ width: '10%', marginLeft: '45%' }} />
                         </div>
+
                         <Paper style={{marginBottom: '15px'}}>
                             <Typography variant="h5">Nombre</Typography>
-                            <Typography variant="p">{this.state.name}</Typography>
+                            <TextField
+                              autoFocus
+                              margin="dense"
+                              id="name"
+                              type="text"
+                              value={this.state.name}
+                              onChange={(event) => {this.setState({ name: event.target.value})}}
+                              fullWidth
+                            />
                         </Paper>
+
                         <Paper style={{marginBottom: '15px'}}>
-                        <Typography variant="h5">ID</Typography>
-                        <Typography variant="p">{this.state.id}</Typography>
+                            <Typography variant="h5">Apellidos</Typography>
+                            <TextField
+                              autoFocus
+                              margin="dense"
+                              id="surname"
+                              type="text"
+                              value={this.state.surname}
+                              onChange={(event) => {this.setState({ surname: event.target.value})}}
+                              fullWidth
+                            />
                         </Paper>
+
+                        <Paper style={{marginBottom: '15px'}}>
+                            <Typography variant="h5">Nombre de Usuario</Typography>
+                            <TextField
+                              autoFocus
+                              margin="dense"
+                              id="username"
+                              type="text"
+                              value={this.state.username}
+                              onChange={(event) => {this.setState({ username: event.target.value})}}
+                              fullWidth
+                            />
+                        </Paper>
+
+                        <Paper style={{marginBottom: '15px'}}>
+                            <Typography variant="h5">Email</Typography>
+                            <Typography variant="p">{this.state.email}</Typography>
+                        </Paper>
+
                         <Paper style={{marginBottom: '15px'}}>
                         <Typography variant="h5">Viajes realizados</Typography>
                         <Typography variant="p">{this.state.no_viajes}</Typography>
                         </Paper>
-                        <Paper style={{marginBottom: '15px'}}>
-                        <Typography variant="h5">Recomentaciones Activas</Typography>
-                        {this.state.recom.map(recomU => {
-                            return (
-                                <div>
-                                    <Typography variant="h7">{recomU}</Typography>
-                                </div>
-                            );
-                        })}
-                        </Paper>
+
                         <Grid container alignItems="flex-start" spacing={2}>
                             <Grid item style={{ marginTop: 16 }}>
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={this.searchTravell}
+                                    onClick={this.editUser}
                                 >
                                     Editar
                                 </Button>
@@ -73,4 +146,4 @@ class User extends Component {
     }
 }
 
-export default User;
+export default connect(mapearEstado, mapear)(User);
