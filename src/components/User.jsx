@@ -28,7 +28,7 @@ const mapearEstado = state => ({
 class User extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             name: '',
             surname: '',
@@ -39,38 +39,24 @@ class User extends Component {
         }
     }
 
-    /*
-    componentWillMount(){
-        console.log('cwm');
-        if(!this.state.fetchedData){
-            this.setState({
-                name: this.props.userValues.user.name,
-                surname: this.props.userValues.user.surname,
-                username: this.props.userValues.user.username,
-                email: this.props.userValues.user.email,
-                no_viajes: this.props.userValues.travells,
-                fetchedData: true
-            });
-        }
-    }
-    */
-
-    componentDidMount(){
-        console.log('cdm');
+    async componentDidMount(){
         const token = localStorage.getItem('tv-token');
-        this.props.getUserAction(token);
-    }
-
-    componentWillUpdate(){
-        console.log('cwu');
-        if(!this.state.fetchedData){
+        await this.props.getUserAction(token);
+        if(!this.props.userValues){
             this.setState({
-                name: this.props.userValues.user.name,
-                surname: this.props.userValues.user.surname,
-                username: this.props.userValues.user.username,
-                email: this.props.userValues.user.email,
-                no_viajes: this.props.userValues.travells,
-                fetchedData: true
+                name: '',
+                surname: '',
+                username: '',
+                email: '',
+                no_viajes: 0
+            });
+        } else {
+            this.setState({
+                name: this.props.userValues.client.name,
+                surname: this.props.userValues.client.surname,
+                username: this.props.userValues.client.username,
+                email: this.props.userValues.client.email,
+                no_viajes: this.props.userValues.travells
             });
         }
     }

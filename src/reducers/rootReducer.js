@@ -5,12 +5,14 @@ import selectedOptionsReducer from './selectOptionsReducer';
 import historyReducer from './historyReducer';
 import authReducer from './authReducer';
 import userReducer from './userReducer';
+import travelReducer from './travelReducer';
 
 export default combineReducers({
     initialValues: getInitialValuesReducer,
     selectedOptions: selectedOptionsReducer,
     historyOptions: historyReducer,
     authOptions: authReducer,
-    userOptions: userReducer
+    userOptions: userReducer,
+    travelOptions: travelReducer
     //form: formReducer,
 });

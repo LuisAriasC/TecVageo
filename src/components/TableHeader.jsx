@@ -10,7 +10,7 @@ class TableHeader extends React.Component {
         return (
             <TableHead>
                 <TableRow>
-                  {columns.map( column => (
+                  {this.props.headers.map( column => (
                       <StyledTableCell key={column} case='head' align='center'>{column}</StyledTableCell>
                   ))}
                 </TableRow>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import api from '../apis/api';
 
 import { fade, makeStyles } from '@material-ui/core/styles';
@@ -247,7 +246,7 @@ function HeaderMenu() {
     event.preventDefault();
   }
 
-  const preventDefaultHistory = event => {
+  const preventDefaultHistory = async (event) => {
     event.preventDefault();
     setGoToIndex(false);
     setGoToMain(false);
@@ -279,21 +278,17 @@ function HeaderMenu() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={preventDefaultProfile}>
-        <Link href="/tecvago/user/" className={classes.link}>
-          <IconButton aria-label="show 4 new mails" color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Perfil</p>
-        </Link>
+        <IconButton aria-label="show 4 new mails" color="inherit">
+          <AccountCircle />
+        </IconButton>
+        <p>Perfil</p>
       </MenuItem>
 
       <MenuItem onClick={preventDefaultHistory}>
-        <Link href="/tecvago/history/" className={classes.link}>
           <IconButton aria-label="show 11 new notifications" color="inherit">
             <FlightTakeoffIcon />
           </IconButton>
           <p>Mis Viajes</p>
-        </Link>
       </MenuItem>
 
       <MenuItem onClick={logOut}>
